@@ -1,6 +1,9 @@
 class Cat{
   // defing properties
+
   String? name;
+  // may hold a null value
+  
   String? color;
   // none nulleable field ?
   //var dataType = value;
@@ -26,5 +29,19 @@ void giveNewColor(){
    
    var notTomCat = Cat( name: 'insaneCat', color:'Yellow');
    print(notTomCat.name);
+
+   // null safety
+
+
     
 }
+
+    // ElevatedButton(
+    //     onPressed: () => print('anonymous pressed'),
+    //     child: Text('Second')),
+    // ElevatedButton(
+    //     onPressed: () {
+    //       //..
+    //       print('serie of commands button pressed');
+    //     },
+    //     child: Text('Third'))
