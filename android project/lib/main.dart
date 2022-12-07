@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import './question.dart';
-import './answer.dart';
+import './result.dart';
+import './quiz.dart';
 
 //functions with one and only expresion
 void main() => runApp(MyApp());
@@ -16,8 +16,6 @@ class MyApp extends StatefulWidget {
 
 // direct parent -> lifting the state app 'manage state'
 class _MyAppState extends State<MyApp> {
-  var _questionIndex = 0;
-
   // var myAddress = const;
 
   // compiled time constant never change
@@ -25,20 +23,49 @@ class _MyAppState extends State<MyApp> {
     // mapping key:anyvalue
     {
       'questionText': 'Name',
-      'answer': ['Santiago', 'Juan', 'Alejandro', 'Rockie']
+      'answer': [
+        {'text': 'Santiago', 'score': 1},
+        {'text': 'Juan', 'score': 2},
+        {'text': 'Alejandro', 'score': 4},
+        {'text': 'Rockie', 'score': 8},
+      ],
     },
     {
       'questionText': 'Number',
-      'answer': ['3178003308', '320 6516755', '301 2318571']
+      'answer': [
+        {'text': '317 8003308', 'score': 4},
+        {'text': '320 6516755', 'score': 2},
+        {'text': '301 2318571', 'score': 1},
+        {'text': '331 2342465', 'score': 8},
+      ],
     },
     {
       'questionText': 'Age',
-      'answer': ['25', '19', '27']
+      'answer': [
+        {'text': '25', 'score': 4},
+        {'text': '19', 'score': 1},
+        {'text': '27', 'score': 2},
+        {'text': '29', 'score': 8},
+      ],
     }
   ];
 
+  var _questionIndex = 0;
+  var _totalscore = 0;
+
+  //reload method
+
+  void _reloadApp() {
+    _questionIndex = 0;
+    _totalscore = 0;
+    setState(() { 
+    });
+  }
+
   //manage state method
-  void _showOption() {
+  void _showOption(int score) {
+    _totalscore += score;
+
     setState(() {
       _questionIndex = _questionIndex + 1;
     });
@@ -50,30 +77,16 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Howdy'),
+          title: Text('Login view'),
         ),
-        body: _questions.length > _questionIndex
-            ?
-            // ternary expression
-            Column(
-                children: [
-                  Question(_questions[_questionIndex]['questionText'] as String),
-
-                  //advanteges of elevated over raised -> main theme color by default
-                  // passing callback to custom widget so it can execute state method
-                  // mapping List into a list of widgets using an anonymous function
-                  // ... spread operator -> takes list's values from each iteration
-                  // and bind them with number of Answer widgets
-                  ...(_questions[_questionIndex]['answer'] as List<String>)
-                      .map((answer) {
-                    return Answer(_showOption, answer);
-                  }).toList() // converts value given from map to a list
-                ],
-                // else statement
+        body: _questions.length > _questionIndex // ternary expression
+            //splitting widgets
+            ? Quiz(
+                showOption: _showOption,
+                questions: _questions,
+                questionIndex: _questionIndex,
               )
-            : Center(
-                child: Text('Finished'),
-              ),
+            : Result(_totalscore, _reloadApp), // else statement
       ),
     );
   }
