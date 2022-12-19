@@ -1,76 +1,49 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../models/transaction.dart';
+import './transaction_item.dart';
 
 class TransactionList extends StatelessWidget {
   final List<Transaction> transactions;
   final Function deleteTx;
 
-  TransactionList(this.transactions, this.deleteTx);
+  const TransactionList(this.transactions, this.deleteTx);
+
+  // build tree creates new objects there for const and final values dont affect app
+  // mark widgets as const to prevent them to rebuild such as Text
 
   @override
   Widget build(BuildContext context) {
     //optional define height and scroll for inner container too
     return Container(
-      height: MediaQuery.of(context).size.height * 0.6,
       //Listview is a scrolleable column with infinite height
       // build all widgets unlike ListView.builder() => long list
       child: transactions.isEmpty
-          ? Column(
-              children: <Widget>[
-                Text(
-                  'No transaction added yet!',
-                  style: Theme.of(context).textTheme.headline6,
-                ),
-                const SizedBox(
-                  height: 50,
-                ),
-                SizedBox(
-                  height: 200,
-                  child: Image.asset(
-                    // remove full path on project or work on pojects
-                    'D:/Adex/ProjectsWn/Flutter/expenseApp/lib/assets/images/shape.png',
-                    fit: BoxFit.cover,
+          ? LayoutBuilder(builder: (ctx, constraints) {
+              return Column(
+                children: <Widget>[
+                  Text(
+                    'No transaction added yet!',
+                    style: Theme.of(context).textTheme.headline6,
                   ),
-                ),
-              ],
-            )
+                  const SizedBox(
+                    height: 50,
+                  ),
+                  SizedBox(
+                    height: constraints.maxHeight * 0.6,
+                    child: Image.asset(
+                      // remove full path on project or work on pojects
+                      'C:/Users/Admin/Documents/Data/Adex/ProjectsWn/Flutter/expenseApp/lib/assets/images/shape.png',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ],
+              );
+            })
           : ListView.builder(
               itemBuilder: (cntx, index) {
-                return Card(
-                  elevation: 8,
-                  margin: const EdgeInsets.symmetric(
-                    vertical: 8,
-                    horizontal: 5,
-                  ),
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: Theme.of(context).accentColor,
-                      radius: 30,
-                      child: Padding(
-                        padding: const EdgeInsets.all(6),
-                        child: FittedBox(
-                          child: Text('\$${transactions[index].amount}'),
-                        ),
-                      ),
-                    ),
-                    title: Text(
-                      transactions[index].title,
-                      style: Theme.of(context).textTheme.headline6,
-                    ),
-                    subtitle: Text(
-                      DateFormat.yMMMd().format(
-                        transactions[index].date,
-                      ),
-                    ),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete),
-                      color: Theme.of(context).errorColor,
-                      onPressed: () => {deleteTx(transactions[index].id)},
-                    ),
-                  ),
-                );
+                return TransactionItem(
+                    transaction: transactions[index], deleteTx: deleteTx);
 
                 // Card(
                 //   child: Row(
