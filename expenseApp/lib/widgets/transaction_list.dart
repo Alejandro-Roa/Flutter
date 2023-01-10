@@ -33,7 +33,7 @@ class TransactionList extends StatelessWidget {
                     height: constraints.maxHeight * 0.6,
                     child: Image.asset(
                       // remove full path on project or work on pojects
-                      'D:/Adex/ProjectsWn/Flutter/expenseApp/lib/assets/images/shape.png',
+                      'lib/assets/images/shape.png',
                       fit: BoxFit.cover,
                     ),
                   ),
